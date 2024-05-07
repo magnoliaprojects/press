@@ -20,6 +20,7 @@ from press.press.doctype.account_request.account_request import AccountRequest
 from press.utils.billing import (
 	get_erpnext_com_connection,
 	get_frappe_io_connection,
+	disabled_frappeio_auth,
 	get_stripe,
 	process_micro_debit_test_charge,
 )
@@ -447,7 +448,7 @@ class Team(Document):
 			self.save(ignore_permissions=True)
 
 	def get_partnership_start_date(self):
-		if frappe.flags.in_test:
+		if frappe.flags.in_test or disabled_frappeio_auth():
 			return frappe.utils.getdate()
 
 		client = get_frappe_io_connection()
@@ -611,7 +612,7 @@ class Team(Document):
 			frappe.get_doc("Invoice", draft_invoice).save()
 
 	def update_billing_details_on_frappeio(self):
-		if frappe.flags.in_install:
+		if frappe.flags.in_install or disabled_frappeio_auth():
 			return
 
 		try:
@@ -805,6 +806,9 @@ class Team(Document):
 
 	@frappe.whitelist()
 	def get_available_partner_credits(self):
+		if disabled_frappeio_auth():
+			return ""
+
 		client = get_frappe_io_connection()
 		response = client.session.post(
 			f"{client.url}/api/method/partner_relationship_management.api.get_partner_credit_balance",
@@ -940,6 +944,9 @@ class Team(Document):
 
 	def get_partner_level(self):
 		# fetch partner level from frappe.io
+		if disabled_frappeio_auth():
+			return "", ""
+
 		client = get_frappe_io_connection()
 		response = client.session.get(
 			f"{client.url}/api/method/get_partner_level",

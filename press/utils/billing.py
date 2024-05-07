@@ -77,6 +77,10 @@ def get_erpnext_com_connection():
 	)
 
 
+def disabled_frappeio_auth():
+	return frappe.db.get_single_value("Press Settings", "disable_frappe_auth", cache=True)
+
+
 def get_frappe_io_connection():
 	if hasattr(frappe.local, "press_frappeio_conn"):
 		return frappe.local.press_frappeio_conn
@@ -89,9 +93,7 @@ def get_frappe_io_connection():
 		"frappeio_api_secret", raise_exception=False
 	)
 
-	if not press_settings.disable_frappe_auth and not (
-		frappe_api_key and frappe_api_secret and press_settings.frappe_url
-	):
+	if not (frappe_api_key and frappe_api_secret and press_settings.frappe_url):
 		frappe.throw("Frappe.io URL not set up in Press Settings", exc=FrappeioServerNotSet)
 
 	frappe.local.press_frappeio_conn = FrappeClient(
