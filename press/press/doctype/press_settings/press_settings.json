@@ -41,6 +41,7 @@
   "erpnext_api_secret",
   "column_break_38",
   "frappeio_authentication_section",
+  "disable_frappe_auth",
   "frappe_url",
   "frappeio_api_key",
   "column_break_39",
@@ -1181,11 +1182,17 @@
    "fieldname": "disable_agent_job_deduplication",
    "fieldtype": "Check",
    "label": "Disable Agent Job Deduplication"
+  },
+  {
+   "default": "0",
+   "fieldname": "disable_frappe_auth",
+   "fieldtype": "Check",
+   "label": "Disable Frappe Auth"
   }
  ],
  "issingle": 1,
  "links": [],
- "modified": "2024-03-22 12:30:21.968896",
+ "modified": "2024-05-07 13:23:08.189526",
  "modified_by": "Administrator",
  "module": "Press",
  "name": "Press Settings",
